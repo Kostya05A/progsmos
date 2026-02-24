@@ -1,24 +1,20 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -O2
-TARGET = prog
-OBJS = matrix2d.o main.o
+CC=gcc
+CFLAGS=-Wall -Werror -Wextra
+LDFLAGS=
+SOURCES=matrix2d.c main.c
+OBJECTS=$(SOURCES:.c=.o)
+HEADERS=matrix2d.h
+TARGET=program
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+all: $(TARGET)
 
-matrix2d.o: matrix2d.c matrix2d.h
-	$(CC) $(CFLAGS) -c matrix2d.c -o matrix2d.o
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
-main.o: main.c matrix2d.h
-	$(CC) $(CFLAGS) -c main.c -o main.o
+%.o: %.c 
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET) result.txt
+	rm -f $(TARGET) $(OBJECTS)
 
-run: $(TARGET)
-	./$(TARGET)
-
-save: $(TARGET)
-	./$(TARGET) > result.txt
-
-.PHONY: clean run save
+.PHONY: all clean
